@@ -1,0 +1,23 @@
+21:36:02 **** Incremental Build of configuration Debug for project Zynq_termprj ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+'Building file: ../src/game.c'
+'Invoking: ARM v7 gcc compiler'
+arm-none-eabi-gcc -Wall -O0 -g3 -c -fmessage-length=0 -MT"src/game.o" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -I../../Zynq_termprj_bsp/ps7_cortexa9_0/include -MMD -MP -MF"src/game.d" -MT"src/game.o" -o "src/game.o" "../src/game.c"
+'Finished building: ../src/game.c'
+' '
+'Building target: Zynq_termprj.elf'
+'Invoking: ARM v7 gcc linker'
+arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../Zynq_termprj_bsp/ps7_cortexa9_0/lib -o "Zynq_termprj.elf"  ./src/game.o ./src/graphics.o ./src/io.o ./src/main.o ./src/memoryfunc.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: Zynq_termprj.elf'
+' '
+'Invoking: ARM v7 Print Size'
+arm-none-eabi-size Zynq_termprj.elf  |tee "Zynq_termprj.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  52248	   2120	  26104	  80472	  13a58	Zynq_termprj.elf
+'Finished building: Zynq_termprj.elf.size'
+' '
+
+21:36:03 Build Finished (took 740ms)
+

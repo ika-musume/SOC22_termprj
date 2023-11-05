@@ -1,0 +1,168 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "xgpio.h"
+#include "xparameters.h"
+#include "bridgeio.h"
+#include "rotaryio.h"
+#include "xscugic.h"
+
+#include "memoryfunc.h"
+#include "graphics.h"
+#include "io.h"
+
+
+//general purpose register
+int i, j, k, t, u, v;
+
+//frame counter
+unsigned int frameCntr = 0;
+
+//scene
+int sceneState = 0;
+
+//action
+int actionState;
+int actionCntr = 0x0FFF;
+
+//scroll
+unsigned int scrollCntr;
+
+//variable for dynamic palette
+unsigned int paletteShiftTemp;
+
+
+void title() {
+	//dynamic palette
+	if((frameCntr & 0x3) == 0x3) {
+		paletteShiftTemp = title_pal[5];
+		for(i=4; i>0; i--) {
+			title_pal[i+1] = title_pal[i];
+		}
+		title_pal[1] = paletteShiftTemp;
+
+		copyPalette(3, title_pal);
+	}
+
+	frameCntr++;
+
+	if(t == 63) t = 0;
+	else t++;
+
+	if(actionCntr <= 0x200) actionCntr = 0x200;
+	else actionCntr = actionCntr - 64;
+	j = actionCntr;
+
+	spriteAttrWrite(16, 3, 0, 0, (0x400 | ((t & 0x18) << 3)), 3, 10 + (j >> 8), 60 - (j >> 10), (j >> 3));
+
+	return;
+}
+
+void prepareGame() {
+	//dynamic palette
+	if((frameCntr & 0x3) == 0x3) {
+		paletteShiftTemp = title_pal[5];
+		for(i=4; i>0; i--) {
+			title_pal[i+1] = title_pal[i];
+		}
+		title_pal[1] = paletteShiftTemp;
+
+		copyPalette(3, title_pal);
+	}
+
+
+
+	if(t == 63) t = 0;
+	else t++;
+
+	//for title
+	if((u & 0x1FF) == 0x100) u = u;
+	else u--;
+
+	//for enemy
+	if(actionCntr <= 0x200) actionCntr = 0x200;
+	else actionCntr = actionCntr - 64;
+	k = actionCntr;
+	//j = actionCntr; //value maintained, do not alter
+
+	//get ready message
+	if(actionCntr == 0x200) frameCntr++;
+	else frameCntr = 0;
+
+	//move title message
+	spriteAttrWrite(16, 3, 0, 0, (0x400 | ((t & 0x18) << 3)), 3, u, 60 - (j >> 10), (j >> 3));
+
+	//enemy sprites
+	spriteAttrWrite(0, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 42 - (k >> 6), (k >> 2));
+	spriteAttrWrite(1, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 66 - (k >> 6), (k >> 2));
+	spriteAttrWrite(2, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 90 - (k >> 6), (k >> 2));
+	spriteAttrWrite(3, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 114 - (k >> 6), (k >> 2));
+	spriteAttrWrite(4, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 138 - (k >> 6), (k >> 2));
+	spriteAttrWrite(5, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 162 - (k >> 6), (k >> 2));
+	spriteAttrWrite(6, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 186 - (k >> 6), (k >> 2));
+	spriteAttrWrite(7, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 210 - (k >> 6), (k >> 2));
+	spriteAttrWrite(8, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 42 - (k >> 6), (k >> 2));
+	spriteAttrWrite(9, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 66 - (k >> 6), (k >> 2));
+	spriteAttrWrite(10, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 90 - (k >> 6), (k >> 2));
+	spriteAttrWrite(11, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 114 - (k >> 6), (k >> 2));
+	spriteAttrWrite(12, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 138 - (k >> 6), (k >> 2));
+	spriteAttrWrite(13, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 162 - (k >> 6), (k >> 2));
+	spriteAttrWrite(14, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 186 - (k >> 6), (k >> 2));
+	spriteAttrWrite(15, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 210 - (k >> 6), (k >> 2));
+
+	return;
+}
+
+void maingame() {
+
+
+
+	if((frameCntr&0x7) == 7) scrollCntr++;
+
+	for(i = 32 ; i < 232; i++) {
+		hscroll_a[i] = scrollCntr;
+	}
+	scrollBlockCopy();
+
+
+
+
+}
+
+
+void game() {
+
+	if(sceneState == 0) {
+		title();
+
+		i = psw();
+		if(i == 1) {
+			sceneState = 1; //change scene
+			u = 10 + (j >> 8);
+			actionCntr = 0x0FFF; //reset action counter
+		}
+		return;
+	}
+	else if(sceneState == 1) {
+		prepareGame();
+
+		if(frameCntr == 120) {
+			sceneState = 2; //change scene
+			u = 10 + (j >> 8);
+			actionCntr = 0x0FFF; //reset action counter
+			scrollCntr = 0; //initialize scroll counter
+			spriteAttrWrite(16, 4, 0, 0, 0x7FE, 3, 0, 0, 0x3FF);
+		}
+		return;
+	}
+	else {
+
+
+
+
+	}
+
+
+	return;
+
+}

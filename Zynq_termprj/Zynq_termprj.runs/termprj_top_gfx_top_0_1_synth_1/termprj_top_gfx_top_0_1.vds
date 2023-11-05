@@ -1,0 +1,151 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Mon Dec 12 21:52:06 2022
+# Process ID: 23564
+# Current directory: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_gfx_top_0_1_synth_1
+# Command line: vivado.exe -log termprj_top_gfx_top_0_1.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source termprj_top_gfx_top_0_1.tcl
+# Log file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_gfx_top_0_1_synth_1/termprj_top_gfx_top_0_1.vds
+# Journal file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_gfx_top_0_1_synth_1\vivado.jou
+#-----------------------------------------------------------
+source termprj_top_gfx_top_0_1.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/rotaryio_1.0'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/bridgeio_1.0'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+Command: synth_design -top termprj_top_gfx_top_0_1 -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+WARNING: [IP_Flow 19-3571] IP 'termprj_top_gfx_top_0_1' is restricted:
+* Module reference is stale and needs refreshing.
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 14744 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 738.293 ; gain = 177.703
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'termprj_top_gfx_top_0_1' [c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/synth/termprj_top_gfx_top_0_1.v:58]
+INFO: [Synth 8-6157] synthesizing module 'gfx_top' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_top.v:1]
+INFO: [Synth 8-6157] synthesizing module 'gfx_cpu' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_cpu.v:1]
+	Parameter STANDBY_S0 bound to: 5'b00000 
+	Parameter OPSTART_S0 bound to: 5'b00001 
+	Parameter OPSTART_S1 bound to: 5'b00010 
+	Parameter DONE_S0 bound to: 5'b00011 
+	Parameter READ_S0 bound to: 5'b00100 
+	Parameter READ_S1 bound to: 5'b00101 
+	Parameter READ_S2 bound to: 5'b00110 
+	Parameter READ_S3 bound to: 5'b00111 
+	Parameter READ_S4 bound to: 5'b01000 
+	Parameter READ_S5 bound to: 5'b01001 
+	Parameter READ_S6 bound to: 5'b01010 
+	Parameter READ_S7 bound to: 5'b01011 
+	Parameter READ_S8 bound to: 5'b01100 
+	Parameter READ_W0 bound to: 5'b01101 
+	Parameter READ_W1 bound to: 5'b01110 
+	Parameter WRITE_S0 bound to: 5'b10000 
+	Parameter WRITE_S1 bound to: 5'b10001 
+	Parameter WRITE_S2 bound to: 5'b10010 
+	Parameter WRITE_S3 bound to: 5'b10011 
+	Parameter WRITE_S4 bound to: 5'b10100 
+	Parameter WRITE_S5 bound to: 5'b10101 
+	Parameter WRITE_S6 bound to: 5'b10110 
+	Parameter WRITE_S7 bound to: 5'b10111 
+	Parameter WRITE_S8 bound to: 5'b11000 
+	Parameter WRITE_W0 bound to: 5'b11001 
+	Parameter WRITE_W1 bound to: 5'b11010 
+INFO: [Synth 8-6157] synthesizing module 'SRAM' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+	Parameter dw bound to: 8 - type: integer 
+	Parameter aw bound to: 11 - type: integer 
+	Parameter simhexfile bound to: C:/Users/kiki1/Desktop/assignments/zynq_fclk2/fclk_test/gfx/ram_init/init_colorram_high.txt - type: string 
+INFO: [Synth 8-3876] $readmem data file 'C:/Users/kiki1/Desktop/assignments/zynq_fclk2/fclk_test/gfx/ram_init/init_colorram_high.txt' is read successfully [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:40]
+INFO: [Synth 8-6155] done synthesizing module 'SRAM' (1#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+INFO: [Synth 8-6157] synthesizing module 'SRAM__parameterized0' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+	Parameter dw bound to: 8 - type: integer 
+	Parameter aw bound to: 11 - type: integer 
+	Parameter simhexfile bound to: C:/Users/kiki1/Desktop/assignments/zynq_fclk2/fclk_test/gfx/ram_init/init_colorram_low.txt - type: string 
+INFO: [Synth 8-3876] $readmem data file 'C:/Users/kiki1/Desktop/assignments/zynq_fclk2/fclk_test/gfx/ram_init/init_colorram_low.txt' is read successfully [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:40]
+INFO: [Synth 8-6155] done synthesizing module 'SRAM__parameterized0' (1#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+WARNING: [Synth 8-3848] Net i_MRST_n in module/entity gfx_cpu does not have driver. [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_cpu.v:11]
+INFO: [Synth 8-6155] done synthesizing module 'gfx_cpu' (2#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_cpu.v:1]
+WARNING: [Synth 8-6104] Input port 'i_MRST_n' has an internal driver [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_top.v:126]
+INFO: [Synth 8-6157] synthesizing module 'gfx_video' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_video.v:1]
+INFO: [Synth 8-6157] synthesizing module 'timinggen' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/timinggen.v:5]
+WARNING: [Synth 8-6014] Unused sequential element __REF_DMA_n_reg was removed.  [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/timinggen.v:267]
+INFO: [Synth 8-6155] done synthesizing module 'timinggen' (3#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/timinggen.v:5]
+INFO: [Synth 8-6157] synthesizing module 'SRAM__parameterized1' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+	Parameter dw bound to: 8 - type: integer 
+	Parameter aw bound to: 11 - type: integer 
+	Parameter simhexfile bound to: (null) - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'SRAM__parameterized1' (3#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+INFO: [Synth 8-6157] synthesizing module 'latch_asyncread' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_video.v:1203]
+INFO: [Synth 8-6155] done synthesizing module 'latch_asyncread' (4#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_video.v:1203]
+INFO: [Synth 8-6157] synthesizing module 'tilemapgen' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/tilemapgen.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'tilemapgen' (5#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/tilemapgen.v:5]
+INFO: [Synth 8-6157] synthesizing module 'SRAM__parameterized2' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+	Parameter dw bound to: 8 - type: integer 
+	Parameter aw bound to: 12 - type: integer 
+	Parameter simhexfile bound to: (null) - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'SRAM__parameterized2' (5#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_sram.v:5]
+INFO: [Synth 8-6157] synthesizing module 'objengine' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/objengine.v:1]
+	Parameter __ENABLE_DOUBLE_HEIGHT_MODE bound to: 1'b0 
+	Parameter KEEP_DRAWING bound to: 3'b100 
+	Parameter END_OF_TILELINE bound to: 2'b01 
+	Parameter END_OF_HLINE bound to: 3'b111 
+	Parameter END_OF_SPRITE bound to: 3'b011 
+	Parameter ATTR_LATCHING_S0 bound to: 3'b001 
+	Parameter ATTR_LATCHING_S1 bound to: 3'b010 
+	Parameter HCOUNT_S0 bound to: 3'b011 
+	Parameter HWAIT_S0 bound to: 3'b100 
+	Parameter ODDSIZE_S0 bound to: 3'b101 
+	Parameter XOFF_S0 bound to: 3'b110 
+	Parameter SUSPEND_S0 bound to: 3'b000 
+INFO: [Synth 8-6155] done synthesizing module 'objengine' (6#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/objengine.v:1]
+INFO: [Synth 8-6157] synthesizing module 'DRAM' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_dram.v:5]
+	Parameter dw bound to: 4 - type: integer 
+	Parameter aw bound to: 8 - type: integer 
+	Parameter rw bound to: 8 - type: integer 
+	Parameter cw bound to: 6 - type: integer 
+	Parameter ctop bound to: 6 - type: integer 
+	Parameter cbot bound to: 1 - type: integer 
+	Parameter simhexfile bound to: (null) - type: string 
+	Parameter init bound to: 32'sb00000000000000000000000000000000 
+INFO: [Synth 8-6155] done synthesizing module 'DRAM' (7#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_dram.v:5]
+INFO: [Synth 8-6157] synthesizing module 'tilemapsr' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/tilemapsr.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'tilemapsr' (8#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/tilemapsr.v:5]
+INFO: [Synth 8-6157] synthesizing module 'objlinelatch' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/objlinelatch.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'objlinelatch' (9#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/objlinelatch.v:5]
+INFO: [Synth 8-6157] synthesizing module 'DRAM__parameterized0' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_dram.v:5]
+	Parameter dw bound to: 8 - type: integer 
+	Parameter aw bound to: 8 - type: integer 
+	Parameter rw bound to: 8 - type: integer 
+	Parameter cw bound to: 8 - type: integer 
+	Parameter ctop bound to: 7 - type: integer 
+	Parameter cbot bound to: 0 - type: integer 
+	Parameter simhexfile bound to: (null) - type: string 
+	Parameter init bound to: 32'sb00000000000000000000000000000001 
+INFO: [Synth 8-6155] done synthesizing module 'DRAM__parameterized0' (9#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/primitive_dram.v:5]
+INFO: [Synth 8-6157] synthesizing module 'prihandler' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/prihandler.v:5]
+	Parameter TMA bound to: 2'b00 
+	Parameter TMB bound to: 2'b01 
+	Parameter OBJ bound to: 2'b10 
+INFO: [Synth 8-6155] done synthesizing module 'prihandler' (10#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_submodule/prihandler.v:5]
+WARNING: [Synth 8-6014] Unused sequential element objbuf_ras_dly_n_reg was removed.  [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_video.v:1094]
+INFO: [Synth 8-6155] done synthesizing module 'gfx_video' (11#1) [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_video.v:1]
+ERROR: [Synth 8-448] named port connection 'o_SYNC_n' does not exist for instance 'video_main' of module 'gfx_video' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_top.v:189]
+INFO: [Synth 8-6157] synthesizing module 'gfx_hdmi' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_hdmi.v:1]
+INFO: [Synth 8-6157] synthesizing module 'tmds_encoder' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_hdmi.v:294]
+ERROR: [Synth 8-6156] failed synthesizing module 'tmds_encoder' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_hdmi.v:294]
+ERROR: [Synth 8-6156] failed synthesizing module 'gfx_hdmi' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_hdmi.v:1]
+ERROR: [Synth 8-6156] failed synthesizing module 'gfx_top' [C:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/gfx_top.v:1]
+ERROR: [Synth 8-6156] failed synthesizing module 'termprj_top_gfx_top_0_1' [c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/synth/termprj_top_gfx_top_0_1.v:58]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 874.754 ; gain = 314.164
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+INFO: [Common 17-83] Releasing license: Synthesis
+43 Infos, 5 Warnings, 0 Critical Warnings and 6 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+INFO: [Common 17-206] Exiting Vivado at Mon Dec 12 21:52:20 2022...

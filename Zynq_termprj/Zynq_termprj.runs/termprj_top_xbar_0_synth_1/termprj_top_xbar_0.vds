@@ -1,0 +1,18 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Dec  8 00:59:16 2022
+# Process ID: 21712
+# Current directory: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_xbar_0_synth_1
+# Command line: vivado.exe -log termprj_top_xbar_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source termprj_top_xbar_0.tcl
+# Log file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_xbar_0_synth_1/termprj_top_xbar_0.vds
+# Journal file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.runs/termprj_top_xbar_0_synth_1\vivado.jou
+#-----------------------------------------------------------
+source termprj_top_xbar_0.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/rotaryio_1.0'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/bridgeio_1.0'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+INFO: [IP_Flow 19-4838] Using cached IP synthesis design for IP termprj_top_xbar_0, cache-ID = e77d195fa2dea9fe.
+INFO: [Common 17-206] Exiting Vivado at Thu Dec  8 00:59:20 2022...

@@ -1,0 +1,63 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "xgpio.h"
+#include "xparameters.h"
+#include "bridgeio.h"
+#include "rotaryio.h"
+#include "xscugic.h"
+
+#include "memoryfunc.h"
+#include "graphics.h"
+#include "io.h"
+
+
+int t;
+int frameCntr = 0xFFF;
+int sceneState;
+int actionState;
+
+void game() {
+	int i, j;
+	int k;
+
+	k = rotary();
+
+	if(t == 63) t = 0;
+	else t++;
+
+	for(i = 32 ; i < 232; i++) {
+		hscroll_a[i] = k;
+	}
+	scrollBlockCopy();
+
+
+	if(frameCntr <= 0x200) frameCntr = 0x200;
+	else frameCntr = frameCntr - 18;
+
+	k = frameCntr;
+
+	spriteAttrWrite(0, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 42 - (k >> 6), (k >> 2));
+	spriteAttrWrite(1, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 66 - (k >> 6), (k >> 2));
+	spriteAttrWrite(2, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 90 - (k >> 6), (k >> 2));
+	spriteAttrWrite(3, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4), 114 - (k >> 6), (k >> 2));
+	spriteAttrWrite(4, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4), 138 - (k >> 6), (k >> 2));
+	spriteAttrWrite(5, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4), 162 - (k >> 6), (k >> 2));
+	spriteAttrWrite(6, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4), 186 - (k >> 6), (k >> 2));
+	spriteAttrWrite(7, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4), 210 - (k >> 6), (k >> 2));
+	spriteAttrWrite(8, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4) + 24, 42 - (k >> 6), (k >> 2));
+	spriteAttrWrite(9, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4) + 24, 66 - (k >> 6), (k >> 2));
+	spriteAttrWrite(10, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4) + 24, 90 - (k >> 6), (k >> 2));
+	spriteAttrWrite(11, 7, 0, 0, (0x600 | ((t & 0x10) >> 2)), 1, (k >> 4) + 24, 114 - (k >> 6), (k >> 2));
+	spriteAttrWrite(12, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 138 - (k >> 6), (k >> 2));
+	spriteAttrWrite(13, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 162 - (k >> 6), (k >> 2));
+	spriteAttrWrite(14, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 186 - (k >> 6), (k >> 2));
+	spriteAttrWrite(15, 7, 0, 0, (0x608 | ((t & 0x10) >> 2)), 2, (k >> 4) + 24, 210 - (k >> 6), (k >> 2));
+
+	spriteAttrWrite(16, 3, 0, 0, (0x400 | ((t & 0x18) << 3)), 3, 100 + (k >> 7), 100 - (k >> 9), (k >> 2));
+
+
+
+
+	return 0;
+}

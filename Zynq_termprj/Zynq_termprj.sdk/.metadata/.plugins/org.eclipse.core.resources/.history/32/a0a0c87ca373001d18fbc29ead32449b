@@ -1,0 +1,268 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "xgpio.h"
+#include "xparameters.h"
+#include "bridgeio.h"
+#include "rotaryio.h"
+#include "xscugic.h"
+
+#include "memoryfunc.h"
+#include "graphics.h"
+#include "io.h"
+
+#define ENEMY_YMIN = 24;
+#define EMEMY_YMAX = 216;
+
+//general purpose register
+unsigned int i, j, k, t, u, v;
+
+//frame counter
+unsigned int frameCntr = 0;
+
+//scene
+int sceneState = 0;
+
+//stage action
+int actionState;
+int actionCntr = 0x1FFF;
+
+//scroll
+unsigned int scrollCntr;
+
+//variable for dynamic palette
+unsigned int paletteShiftCntr = 0;;
+unsigned int paletteShiftTemp;
+
+//dynamic sprite counter
+unsigned int dynamicSpriteCntr = 0;
+
+//SPRITE LIST
+//valid/xpos/ypos/objcode/palette/denom
+unsigned int enemyList[192]; //enemy list
+unsigned int bulletList[24]; //bullet list
+unsigned int missleList[12]; //missle list
+unsigned int enemyXMax = 0;
+unsigned int enemyXMin = 0;
+unsigned int enemyYMax = 0;
+
+//ship ypos
+int shipYPos = 120;
+
+
+
+///////////////////////////////////////////////////////////
+//////  TITLE SCREEN
+////
+
+void title() {
+    //dynamic palette
+    if((frameCntr & 0x3) == 0x3) {
+        paletteShiftTemp = title_pal[5];
+        for(i=4; i>0; i--) {
+            title_pal[i+1] = title_pal[i];
+        }
+        title_pal[1] = paletteShiftTemp;
+
+        copyPalette(3, title_pal);
+    }
+
+    frameCntr++;
+
+    if(t == 63) t = 0;
+    else t++;
+
+    if(actionCntr <= 0x200) actionCntr = 0x200;
+    else actionCntr = actionCntr - 64;
+    j = actionCntr;
+
+    spriteAttrWrite(32, 3, 0, 0, (0x400 | ((t & 0x18) << 3)), 8, 10 + (j >> 7), 60 - (j >> 9), (j >> 3));
+
+    return;
+}
+
+
+
+///////////////////////////////////////////////////////////
+//////  GAME PREPARATION
+////
+
+void prepareGame() {
+    //dynamic palette
+    if((t & 0x3) == 0x3) {
+        paletteShiftTemp = title_pal[5];
+        for(i=4; i>0; i--) {
+            title_pal[i+1] = title_pal[i];
+        }
+        title_pal[1] = paletteShiftTemp;
+
+        copyPalette(3, title_pal);
+    }
+
+
+
+
+    //sprite and palette update free-running counter
+    if(t == 63) t = 0;
+    else t++;
+
+    //for enemy
+    if(actionCntr <= 0x200) actionCntr = 0x200;
+    else actionCntr = actionCntr - 64;
+    k = actionCntr;
+    //j = actionCntr; //value maintained, do not alter
+
+    //get ready message
+    if(actionCntr == 0x200) frameCntr++;
+    else frameCntr = 0;
+
+
+    //for title
+    if((u & 0x1FF) == 0x100) u = u; //xpos 256
+    else u--;
+
+    //move title message
+    spriteAttrWrite(32, 3, 0, 0, (0x400 | ((t & 0x18) << 3)), 8, u, 60 - (j >> 10), (j >> 3));
+
+
+    //enemy sprites
+    //k>>4 = 32, k>>2 = 8
+
+    //modify enemy attributes
+    for(i=0; i<4; i++) {
+        for(j=0; j<7; j++) {
+            enemyList[i*48 + j*6 + 1] =              24*i + (k >> 4); //xpos
+            enemyList[i*48 + j*6 + 2] = ENEMY_YMIN + 24*j - (k >> 6); //ypos
+            enemyList[i*48 + j*6 + 3] = (0x080 | ((i & 0x3) << 3) | ((t & 0x10) >> 2)); //objcode
+            enemyList[i*48 + j*6 + 4] = i + 1; //palette
+            enemyList[i*48 + j*6 + 5] = (k >> 2);
+        }
+    }
+
+    //update enemy attributes
+    for(i=0; i<4; i++) {
+        for(j=0; j<7; j++) {
+            spriteAttrWrite(8*i + j + 32, 7, 0, 0, 
+                            enemyList[i*48 + j*6 + 3], 
+                            enemyList[i*48 + j*6 + 4], 
+                            enemyList[i*48 + j*6 + 1], 
+                            enemyList[i*48 + j*6 + 2], 
+                            enemyList[i*48 + j*6 + 5]);
+        }
+    }
+    
+
+
+
+    //move ship
+    if((u & 0x1FF) < 256) v = 242; //0~255
+    else {
+        if((u & 0xFF) <= 120) v = 120;
+        else v = u;
+    }
+
+    spriteAttrWrite(20, 7, 0, 0, 0x200, 4, 200, v, 0x80); //shipu
+    spriteAttrWrite(21, 7, 0, 0, 0x204, 4, 216, v, 0x80);
+
+    return;
+}
+
+
+
+///////////////////////////////////////////////////////////
+//////  MAIN GAME
+////
+
+void maingame() {
+    //dynamic palette
+     
+
+
+    if((frameCntr&0x7) == 3) scrollCntr--;
+    frameCntr++;
+
+
+    //tilemap scroll
+    for(i = 32 ; i < 232; i++) {
+        hscroll_a[i] = (frameCntr&0x1FF) ^ 0x1FF;
+    }
+    scrollBlockCopy();
+
+
+
+    //move ship
+    shipYPos = shipYPos - getRotaryDelta();
+    if(shipYPos > 220) shipYPos = 220;
+    else if(shipYPos < 26) shipYPos = 26;
+    spriteAttrWrite(20, 7, 0, 0, 0x200, 4, 200, shipYPos, 0x80);
+    spriteAttrWrite(21, 7, 0, 0, 0x204, 4, 216, shipYPos, 0x80);
+
+
+
+
+
+    return;
+}
+
+
+///////////////////////////////////////////////////////////
+//////  sprite update
+////
+
+void updateEnemyXPos(unsigned int arr) {
+
+}
+
+
+
+
+///////////////////////////////////////////////////////////
+//////  CASE
+////
+
+void game() {
+
+    if(sceneState == 0) {
+        title();
+
+        i = psw();
+        if(i == 1) {
+            sceneState = 1; //change scene
+            u = 10 + (j >> 8);
+            printf("hello world %x", u);
+            actionCntr = 0x0FFF; //reset action counter
+
+            //set all enemy as valid
+            for(i=0; i<4; i++) {
+                for(j=0; j<7; j++) {
+                    enemyList[i*48 + j*6] = 1; //valid
+                }
+            }
+        }
+
+        return;
+    }
+    else if(sceneState == 1) {
+        prepareGame();
+
+        if(frameCntr == 120) {
+            sceneState = 2; //change scene
+            u = 10 + (j >> 8);
+            actionCntr = 0x0FFF; //reset action counter
+            scrollCntr = 0; //initialize scroll counter
+            frameCntr = 0;
+            spriteAttrWrite(16, 4, 0, 0, 0x7FE, 3, 0, 0, 0x3FF);
+        }
+        return;
+    }
+    else {
+        maingame();
+
+
+
+    }
+
+
+    return;
+
+}

@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Wed May  3 20:14:40 2023
+# Process ID: 9400
+# Current directory: C:/Users/kiki1/Desktop/assignments/Zynq_termprj
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent31996 C:\Users\kiki1\Desktop\assignments\Zynq_termprj\Zynq_termprj.xpr
+# Log file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj/vivado.log
+# Journal file: C:/Users/kiki1/Desktop/assignments/Zynq_termprj\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/rotaryio_1.0'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/gfx_source/bridgeio_1.0'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+WARNING: [IP_Flow 19-3664] IP 'termprj_top_gfx_top_0_1' generated file not found 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/termprj_top_gfx_top_0_1.dcp'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'termprj_top_gfx_top_0_1' generated file not found 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/termprj_top_gfx_top_0_1_stub.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'termprj_top_gfx_top_0_1' generated file not found 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/termprj_top_gfx_top_0_1_stub.vhdl'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'termprj_top_gfx_top_0_1' generated file not found 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/termprj_top_gfx_top_0_1_sim_netlist.v'. Please regenerate to continue.
+WARNING: [IP_Flow 19-3664] IP 'termprj_top_gfx_top_0_1' generated file not found 'c:/Users/kiki1/Desktop/assignments/Zynq_termprj/Zynq_termprj.srcs/sources_1/bd/termprj_top/ip/termprj_top_gfx_top_0_1/termprj_top_gfx_top_0_1_sim_netlist.vhdl'. Please regenerate to continue.
+open_project: Time (s): cpu = 00:00:07 ; elapsed = 00:00:11 . Memory (MB): peak = 780.641 ; gain = 130.730
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Wed May  3 20:17:10 2023...

@@ -1,0 +1,239 @@
+#include "stdio.h"
+#include "xgpio.h"
+#include "xparameters.h"
+#include "bridgeio.h"
+#include "xscugic.h"
+
+///////////////////////////////////////////////////////////
+//////  memory access functions
+////
+
+//
+//	BASIC ACCESS
+//
+
+void memWrite(unsigned int regNum, unsigned int addr, unsigned int data) {
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 0, addr);
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 4, data);
+
+	unsigned int select;
+	switch(regNum){
+	    case 0: select = 0x20; break; //scroll
+	    case 1: select = 0x10; break; //vram1
+	    case 2: select = 0x08; break; //vram2
+	    case 3: select = 0x04; break; //char
+	    case 4: select = 0x02; break; //obj
+	    case 5: select = 0x01; break; //palette
+	}
+
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 8, (select << 26) | 0x2);
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 8, 0x00000000);
+	while(BRIDGEIO_mReadReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 12));
+}
+
+
+int memRead(unsigned int regNum, unsigned int addr) {
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 0, addr);
+
+	unsigned int select;
+	switch(regNum){
+	    case 0: select = 0x20; break; //scroll
+	    case 1: select = 0x10; break; //vram1
+	    case 2: select = 0x08; break; //vram2
+	    case 3: select = 0x04; break; //char
+	    case 4: select = 0x02; break; //obj
+	    case 5: select = 0x01; break; //palette
+	}
+
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 8, (select << 26) | 0x1);
+	BRIDGEIO_mWriteReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 8, 0x00000000);
+	while(BRIDGEIO_mReadReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 12));
+
+	return BRIDGEIO_mReadReg(XPAR_BRIDGEIO_0_S00_AXI_BASEADDR, 4);
+}
+
+
+
+
+
+//
+//	SCROLL REGISTERS
+//
+
+/*
+	TILEMAP A
+    hscroll: 000-0FF(LSBs), 100-1FF(MSB)
+    vscroll: 7C0-7FF
+
+    TILEMAP B
+    hscroll: 200-2FF(LSBs), 300-3FF(MSB)
+    vscroll: 780-7BF
+*/
+
+unsigned int hscroll_a[256] = {0};
+unsigned int vscroll_a[64]  = {0};
+unsigned int hscroll_b[256] = {0};
+unsigned int vscroll_b[64]  = {0};
+
+void scrollBlockCopy() {
+	int i;
+
+	//copy TMA hscroll val
+	for(i=0; i<256; i++) {
+		memWrite(0, i, hscroll_a[i]);
+		memWrite(0, i+0x100, hscroll_a[i] >> 8);
+	}
+
+	//copy TMA vscroll val
+	for(i=0; i<64; i++) {
+		memWrite(0, i+0x7C0, vscroll_a[i]);
+	}
+
+	//copy TMB hscroll val
+	for(i=0; i<256; i++) {
+		memWrite(0, i+0x200, hscroll_b[i]);
+		memWrite(0, i+0x300, hscroll_b[i] >> 8);
+	}
+
+	//copy TMA vscroll val
+	for(i=0; i<64; i++) {
+		memWrite(0, i+0x780, vscroll_b[i]);
+	}
+}
+
+
+
+
+//
+//	TILEMAP REGISTERS
+//
+
+void fillTilemap(int pr, int color, int charcode, int tmsel) {
+	unsigned int i, j, addr;
+	unsigned int vram1data, vram2data;
+
+	vram1data = (((pr & 0xF) << 12) & (charcode & 0x7FF) & 0xF7FF);
+	vram2data = color & 0x7F;
+
+	if(tmsel == 0) addr = 0x000;
+	else addr = 0x800;
+
+	for(i=0; i<32; i++) {
+		for(j=0; j<64; j++) {
+			memWrite(1, addr, vram1data);
+			memWrite(2, addr, vram2data);
+
+			addr++; //tilemap address
+		}
+	}
+}
+
+void drawTilemap(int w, int h, int x, int y, int pr, int color, int charcode, int tmsel) {
+	unsigned int i, j, addr;
+	unsigned int vram1data, vram2data;
+
+	if(tmsel == 0) addr = x + y*64;
+	else addr = 0x800 + x + y*64;
+
+	vram1data = ((((pr & 0xF) << 12) | (charcode & 0x7FF)) & 0xF7FF);
+	vram2data = color & 0x7F;
+
+	for(i=0; i<h; i++) {
+		for(j=0; j<w; j++) {
+			memWrite(1, addr, vram1data);
+			memWrite(2, addr, vram2data);
+
+			vram1data++; //increase charcode
+			addr++; //tilemap address
+		}
+
+		addr = addr - h + 64; //next line
+	}
+}
+
+
+
+
+//
+//	GRAPHIC RAM BLOCK COPY
+//
+
+//CHARRAM DATA BLOCK COPY
+void copyTiles(int charcode, const char data[], int size) {
+	unsigned int i, addr;
+	unsigned int chardata;
+
+	addr = charcode * 0x10;
+
+	for(i=0; i<size; i=i+2) {
+		chardata = (((unsigned int)data[i] & 0xFF) << 8 ) | ((unsigned int)data[i+1] & 0xFF);
+		memWrite(3, addr, chardata);
+		addr++;
+	}
+}
+
+
+
+
+//
+//	PALETTE RAM
+//
+
+//PALETTE UPLOAD
+void copyPalette(int colorcode, const unsigned int data[]) {
+	unsigned int i, addr;
+	unsigned int color;
+
+	addr = colorcode * 0x10;
+
+	for(i=0; i<16; i++) {
+		color = ((data[i] & 0x000000F8) << 7) | ((data[i] & 0x0000F800) >> 6) | ((data[i] & 0x00F80000) >> 19);
+		memWrite(5, addr, color);
+		addr++;
+	}
+}
+
+unsigned int readPalette(int colorcode, int num) {
+	unsigned int addr;
+
+	addr = colorcode * 0x10 + num;
+
+	return (unsigned int)memRead(5, addr);
+}
+
+void writePalette(int colorcode, int num, unsigned int data) {
+	unsigned int addr;
+
+	addr = colorcode * 0x10 + num;
+
+	memWrite(5, addr, data);
+}
+
+
+
+
+//
+//	SPRITE REGISTERS
+//
+
+//SPRITE WRITE
+void spriteAttrWrite(int pri, int size, int hflip, int vflip, int charcode, int palette, int xpos, int ypos, int denom) {
+	int index, code, i;
+	int attr[6];
+
+	index = (239 - pri) * 8;
+	code = charcode >> 1;
+
+	attr[0] = (((denom & 0x300) >> 2) | ((size & 0x7) << 3) | (hflip & 0x1)) & 0xF9;
+	attr[1] = denom & 0xFF;
+	attr[2] = code & 0xFF;
+	attr[3] = ((code & 0x300) >> 2) | ((vflip & 0x1) << 5) | ((palette & 0xF) << 1) | ((xpos & 0x100) >> 8);
+	attr[4] = xpos & 0xFF;
+	attr[5] = ypos & 0xFF;
+
+	for(i=0; i<6; i++) {
+		memWrite(4, index+1+i, attr[i]);
+	}
+}
+
+

@@ -1,0 +1,37 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "xgpio.h"
+#include "xparameters.h"
+#include "bridgeio.h"
+#include "rotaryio.h"
+#include "xscugic.h"
+
+
+int rotaryAbs = 0;
+int rotaryDeltaz, rotaryDeltazz, rotaryDeltazzz, rotaryDeltazzzz, rotaryAccel; //registers for acceleration weighing
+int rotary() {
+	rotaryDeltazzz = rotaryDeltazz;
+	rotaryDeltazz = rotaryDeltaz;
+	rotaryDeltaz = (int)ROTARYIO_mReadReg(XPAR_ROTARYIO_0_S00_AXI_BASEADDR, 0);
+
+	//idk why this works fine
+	rotaryAccel = (abs(rotaryDeltaz) + abs(rotaryDeltazz) + abs(rotaryDeltazzz)*2 + abs(rotaryDeltazzzz)*4);
+	if (rotaryAccel > 6) rotaryAccel = 6;
+	else if (rotaryAccel < 1) rotaryAccel = 1;
+	rotaryAbs = rotaryAbs + (rotaryDeltaz * rotaryAccel);
+
+	return rotaryAbs;
+}
+
+
+int posedge, pswState, pswStatez;
+int psw() {
+	pswStatez = pswState;
+	pswState = (int)ROTARYIO_mReadReg(XPAR_ROTARYIO_0_S00_AXI_BASEADDR, 1);
+
+	if(pswStatez == 0 && pswState == 1)
+
+	return ;
+
+}
